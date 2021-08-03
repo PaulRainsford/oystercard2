@@ -7,7 +7,7 @@ MAX_TOP_UP = 90
 attr_reader :balance, 
             :entry_station, 
             :exit_station,
-            :journey ##??
+            :journey,
             :journeys
 
   def initialize
