@@ -3,6 +3,7 @@ require "oystercard"
 describe Oystercard do 
 
   let (:station) { double :station }
+  let(:journey) { {entrance: station, exit: station} }
 
   subject(:oystercard) { described_class.new }
   
@@ -56,12 +57,6 @@ describe Oystercard do
       expect(subject.entry_station).to eq :station
     end
 
-    it "creates a hash to store entry and exit details" do
-      subject.top_up(Oystercard::MINIMUM_FARE)
-      subject.touch_in(:station)
-      expect(subject.journey).to be_a Hash
-    end
-
     # it pushes entry station (with key) to journey hash
 
   end
@@ -84,11 +79,7 @@ describe Oystercard do
       subject.touch_in(:station)
       expect { subject.touch_out(:station) }.to change{subject.entry_station}.to nil
     end
-    it "remembers station after touch_out" do
-      subject.top_up(Oystercard::MINIMUM_FARE)
-      subject.touch_out(:station)
-      expect(subject.exit_station).to eq :station
-    end
+
 
     # adds exit station with key to journey hash
 
@@ -97,5 +88,14 @@ describe Oystercard do
 
   end
 
+  it 'starts with an empty journey array' do
+    expect(subject.journeys).to eq([])
+  end
 
+  it 'stores our journey to array' do
+    subject.top_up(50)
+    subject.touch_in(station)
+    subject.touch_out(station)
+    expect(subject.journeys).to include(journey)
+  end
 end

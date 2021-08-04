@@ -28,15 +28,15 @@ attr_reader :balance,
 
   def touch_in(station)
     raise "Insufficient funds!" if @balance < MINIMUM_FARE
-    @journey = Hash.new ##??
     @entry_station = station
   end
   
   def touch_out(station)
-    deduct(MINIMUM_FARE)
+    # @exit_station = station
+    # @journeys << { entrance: @entry_station, exit: @exit_station }
+    journey_log(@entry_station, station)
     @entry_station = nil
-    @exit_station = station
-
+    deduct(MINIMUM_FARE)
   end
 
   private
@@ -44,5 +44,10 @@ attr_reader :balance,
   def deduct(money)
     @balance -= money
   end
+
+  def journey_log(entry, final_stop)
+    @journeys << { entrance: entry, exit: final_stop }
+  end
+
 
 end
